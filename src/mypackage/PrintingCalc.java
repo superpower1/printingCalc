@@ -1,7 +1,6 @@
 package mypackage;
 
 import java.io.BufferedReader;
-import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
@@ -22,8 +21,24 @@ public class PrintingCalc {
 		this.colorDoublePrice = colorDoublePrice;
 	}
 	
-	private void calc(int totalPage, int colorPage, boolean isDouble) {
+	private void calc() {
+		int totalCost = 0;
+		for(int i=0; i<allRows.size(); i++) {
+			PrintJob job = allRows.get(i);
+			int colorPage = job.getColorPage();
+			int blackPage = job.getTotalPage() - colorPage;
+			int singleJobCost = 0;
+			if(job.getIsDouble()) {
+				singleJobCost = blackPage*blackDoublePrice + colorPage*colorDoublePrice;
+			}
+			else {
+				singleJobCost = blackPage*blackSinglePrice + colorPage*colorSinglePrice;
+			}
+			
+			totalCost += singleJobCost;
+		}
 		
+		System.out.println(totalCost);
 		
 	}
 	
@@ -68,8 +83,8 @@ public class PrintingCalc {
 			e.printStackTrace();
 		}
 		
-
-        printCost();
+		calc();
+//        printCost();
 	}
 	
 
