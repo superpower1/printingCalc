@@ -12,7 +12,12 @@ public class PrintingCalc {
 	private int blackDoublePrice;
 	private int colorSinglePrice;
 	private int colorDoublePrice;
+	
+	private int totalCost;
+	
 	private ArrayList<PrintJob> allRows = new ArrayList<PrintJob>();
+	
+	private ArrayList<Integer> eachJobCost = new ArrayList<Integer>();
 	
 	PrintingCalc(int blackSinglePrice, int blackDoublePrice, int colorSinglePrice, int colorDoublePrice) {
 		this.blackSinglePrice = blackSinglePrice;
@@ -22,7 +27,6 @@ public class PrintingCalc {
 	}
 	
 	private void calc() {
-		int totalCost = 0;
 		for(int i=0; i<allRows.size(); i++) {
 			PrintJob job = allRows.get(i);
 			int colorPage = job.getColorPage();
@@ -35,24 +39,37 @@ public class PrintingCalc {
 				singleJobCost = blackPage*blackSinglePrice + colorPage*colorSinglePrice;
 			}
 			
+			eachJobCost.add(singleJobCost);
+			
 			totalCost += singleJobCost;
 		}
-		
-		System.out.println(totalCost);
 		
 	}
 	
 	private void printCost() {
-		for(int i=0; i<allRows.size(); i++) {
+
+		String leftAlignFormat = "| %-6d | %-10d | %-10d | %-13s | %-6s |%n";
+
+		System.out.format("+--------+------------+------------+---------------+--------+%n");
+		System.out.format("| Job ID | Total Page | Color Page | Double/Single |  Cost  |%n");
+		System.out.format("+--------+------------+------------+---------------+--------+%n");
+		for (int i = 0; i < allRows.size(); i++) {
 			PrintJob tmp = allRows.get(i);
 			
-			System.out.println(
-					tmp.getTotalPage() + " " +
-					tmp.getColorPage() + " " +
-					String.valueOf(tmp.getIsDouble())
-					);
-
+			String cost = "$"+String.format("%.2f", eachJobCost.get(i)/100.00);
+			String DoubleOrSingle;
+			if(tmp.getIsDouble()) {
+				DoubleOrSingle = "Double";
+			}
+			else {
+				DoubleOrSingle = "Single";
+			}
+			
+		    System.out.printf(leftAlignFormat, i+1, tmp.getTotalPage(), tmp.getColorPage(), DoubleOrSingle, cost);
 		}
+		System.out.format("+--------+------------+------------+---------------+--------+%n");
+		
+		System.out.println("Total Cost: $" + String.format("%.2f", totalCost/100.00));
 		
 	}
 	
@@ -84,7 +101,7 @@ public class PrintingCalc {
 		}
 		
 		calc();
-//        printCost();
+        printCost();
 	}
 	
 
