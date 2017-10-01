@@ -44,6 +44,10 @@ public class PrintingCalc {
 		totalCost = 0;
 	}
 	
+	int getTotalCost() {
+		return totalCost;
+	}
+	
 	/**
 	* Calculates each job's cost using ArrayList allRows and store results in ArrayList eachJobCost
 	* Add up all costs and save to totalCost
